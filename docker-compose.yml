@@ -14,10 +14,10 @@ services:
   mariadb:
     image: bitnami/mariadb:latest
     environment:
-      - MARIADB_ROOT_PASSWORD=Root.4lab
-      - MARIADB_DATABASE=mining
-      - MARIADB_USER=smashed
-      - MARIADB_PASSWORD=User.4lab
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     ports:
       - 3306:3306
     volumes:
@@ -25,19 +25,11 @@ services:
 
   php-fpm:
     image: nesfit/jane-smashed:1.1
-#    container_name: jane-smashed-phpfpm
     build:
       context: ./php-fpm
       dockerfile: Dockerfile
     volumes:
       - lara_data:/app
-#    links:
-#      - mailcatcher:mailcatcher
-    environment:
-      - DB_HOST=mariadb
-      - DB_DATABASE=mining
-      - DB_USERNAME=smashed
-      - DB_PASSWORD=User.4lab
 
 volumes:
   lara_data:
@@ -56,29 +48,3 @@ x-logging:
   options:
     max-size: '20m'
     max-file: '5'
-
-
-
-#  redis:
-#    image: bitnami/redis:latest
-#    ports:
-#      - 63790:6379
-#    environment:
-#      - ALLOW_EMPTY_PASSWORD=yes
-#  redis-commander:
-#    image: rediscommander/redis-commander:latest
-#    restart: always
-#    depends_on:
-#      - redis
-#    links:
-#    - redis:redis
-#    environment:
-#    - REDIS_HOSTS=local:redis:6379
-#    ports:
-#    - 8091:8081     # web interface, hit localhost:8091 to explore redis
-#  mailcatcher:
-#    image: tophfr/mailcatcher
-#    ports:
-#      - 1081:80   # web interface, hit localhost:1080 to see the mails
-#      - 1025:25   # expose port 1025 so we can send emails from the host machine as well
-

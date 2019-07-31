@@ -1,13 +1,15 @@
-version: '3'
+version: '3.4'
 services:
 
   nginx:
     image: bitnami/nginx:latest
     ports:
       - 80:8080
+    depends_on:
+      - php-fpm
     volumes:
       - ./nginx/laravel.nginx:/opt/bitnami/nginx/conf/server_blocks/laravel.conf
-      - ./laravel:/app
+      - lara_data:/app
 
   mariadb:
     image: bitnami/mariadb:latest
@@ -22,9 +24,13 @@ services:
       - ./mariadb/data:/bitnami/mariadb/data
 
   php-fpm:
-    image: bitnami/php-fpm:latest
+    image: nesfit/jane-smashed:1.1
+#    container_name: jane-smashed-phpfpm
+    build:
+      context: ./php-fpm
+      dockerfile: Dockerfile
     volumes:
-      - ./laravel/:/app
+      - lara_data:/app
 #    links:
 #      - mailcatcher:mailcatcher
     environment:
@@ -32,6 +38,26 @@ services:
       - DB_DATABASE=mining
       - DB_USERNAME=smashed
       - DB_PASSWORD=User.4lab
+
+volumes:
+  lara_data:
+    driver: local-persist
+    driver_opts:
+      mountpoint: "${LOCAL_VOLUME_MOUNT_POINT}/php-fpm/data"
+
+networks:
+  default:
+    external:
+      name: ${NETWORK}
+
+
+x-logging:
+  driver: json-file
+  options:
+    max-size: '20m'
+    max-file: '5'
+
+
 
 #  redis:
 #    image: bitnami/redis:latest

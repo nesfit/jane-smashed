@@ -1,0 +1,21 @@
+{
+    "name": "api-server",
+    "version": "1.0.0",
+    "description": "",
+    "author": "Braj K <https://github.com/Braj-120>",
+    "main": "server.js",
+    "scripts": {
+      "start": "node src/server.js"
+    },
+    "devDependencies": {
+      "eslint": "^8.2.0"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "mariadb": "^2.5.5",
+        "bcrypt": "^5.0.1",
+        "uuid": "^8.3.2",
+        "jsonwebtoken":"^8.5.1",
+        "json2csv": "^5.0.6"
+    }
+}

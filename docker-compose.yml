@@ -18,6 +18,7 @@ services:
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - MARIADB_USER=${MARIADB_USER}
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - BITNAMI_DEBUG=true
     ports:
       - 3306:3306
     volumes:
@@ -28,8 +29,25 @@ services:
     build:
       context: ./php-fpm
       dockerfile: Dockerfile
+    environment:
+      - PMA_HOST=mariadb
     volumes:
       - lara_data:/app
+      - ./php-fpm.conf:/opt/bitnami/php/etc/php-fpm.conf
+    depends_on:
+      - mariadb
+  
+  api-server:
+    image: node:16
+    build:
+      context: ./api-server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8081"
+    volumes:
+      - ./api-server/data:/api-server/data
+    depends_on:
+      - mariadb
 
 volumes:
   lara_data:

@@ -11,7 +11,7 @@ module.exports.authenticate = async (req, res) => {
     try {
         const username = req.body.username;
         const password = req.body.password;
-        const host = req.body.host;
+        const host = req.body.hostname;
         if (!username || !password || !host) {
             return res.status(400).end();
         }

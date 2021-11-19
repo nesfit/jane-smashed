@@ -12,7 +12,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential libpng-dev
 RUN npm install -D imagemin-pngquant@5.0.1
-RUN npm run prod
+RUN npm run dev
 
 RUN chmod -R 777 storage bootstrap/cache
 

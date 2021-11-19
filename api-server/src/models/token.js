@@ -2,7 +2,7 @@
 const pool = require('./pool');
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid').v4;
-
+const config = require('../../data/config')
 /**
  * Verifies User name and Password combination to the one stored in server
  * @param {String} username 
@@ -21,11 +21,11 @@ module.exports.createToken = async function (username, host) {
         const token = jwt.sign({
             name: name,
             host: host,
-            iss: "API-Server",
+            iss: config.token.iss,
             keyid: id
         }, secret, {
             keyid: id,
-            expiresIn: "1d"
+            expiresIn: config.token.expiry
         });
         const op = await conn.query("INSERT INTO tokens VALUES(?,?,?,?,?, NOW())", [id, username, host, secret, token]);
         if (op.affectedRows === 0) {

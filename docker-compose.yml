@@ -1,18 +1,8 @@
 version: '3.4'
 services:
 
-  nginx:
-    image: bitnami/nginx:latest
-    ports:
-      - 80:8080
-    depends_on:
-      - php-fpm
-    volumes:
-      - ./nginx/laravel.nginx:/opt/bitnami/nginx/conf/server_blocks/laravel.conf
-      - lara_data:/app
-
   mariadb:
-    image: bitnami/mariadb:latest
+    image: bitnami/mariadb:10.3.34
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       - MARIADB_DATABASE=${MARIADB_DATABASE}
@@ -21,21 +11,29 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./mariadb/data:/bitnami/mariadb/data
+      - mariadb_data:/bitnami/mariadb/data
 
   php-fpm:
     image: nesfit/jane-smashed:1.1
-    build:
+    build:    
       context: ./php-fpm
       dockerfile: Dockerfile
+    ports:
+      - ${WEBAPP_HTTP_PORT}:80
+#      - ${WEBAPP_HTTPS_PORT}:443
     volumes:
       - lara_data:/app
 
 volumes:
   lara_data:
-    driver: local-persist
-    driver_opts:
-      mountpoint: "${LOCAL_VOLUME_MOUNT_POINT}/php-fpm/data"
+#    driver: local-persist
+#    driver_opts:
+#      mountpoint: "${LOCAL_VOLUME_MOUNT_POINT}/php-fpm/data"
+
+  mariadb_data:
+#    driver: local-persist
+#    driver_opts:
+#      mountpoint: "${LOCAL_VOLUME_MOUNT_POINT}/php-fpm/data"
 
 networks:
   default:
